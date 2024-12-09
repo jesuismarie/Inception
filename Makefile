@@ -24,6 +24,7 @@ stop:
 	@docker-compose -f ./srcs/docker-compose.yml stop
 
 remove_volumes:
-	@rm -rf /home/$(USER)/data
+	@rm -rf /home/$(USER)/data/wordpress
+	@rm -rf /home/$(USER)/data/mariadb
 
 .PHONY: all re up down hard_down start stop config_volumes remove_volumes
