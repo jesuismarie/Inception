@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3.8'
 
 services:
   nginx:
@@ -31,7 +31,7 @@ services:
 
   wordpress:
     container_name: wordpress
-    image: wordpress
+    image: wordpress:php-fpm
     build: ./requirements/wordpress
     env_file:
       - .env
@@ -58,5 +58,5 @@ volumes:
       type: none
 
 networks:
-    inception:
-        driver: bridge
+  inception:
+    driver: bridge
