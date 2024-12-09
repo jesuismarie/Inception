@@ -15,14 +15,11 @@ RUN apt update \
 	php${PHP_VERSION}-pdo \
 	php${PHP_VERSION}-gd \
 	php${PHP_VERSION}-cli \
+	php${PHP_VERSION}-cgi \
 	php${PHP_VERSION}-mbstring \
 	php${PHP_VERSION}-redis \
 	&& apt clean \
 	&& rm -rf /var/lib/apt/lists/*
-
-# RUN wget https://wordpress.org/latest.tar.gz -O /tmp/wordpress.tar.gz \
-# 	&& tar -xzf /tmp/wordpress.tar.gz -C /var/www/html \
-# 	&& rm /tmp/wordpress.tar.gz
 
 RUN sed -i "s/listen = .*/listen = 0.0.0.0:9000/" /etc/php/${PHP_VERSION}/fpm/pool.d/www.conf
 
