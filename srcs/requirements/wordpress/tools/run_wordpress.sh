@@ -41,6 +41,8 @@ sleep 10
 mkdir -p /run/php
 chown -R www-data:www-data /run/php
 
+wp theme install "twentytwentytwo" --activate --allow-root;
+
 exec php-fpm7.4 -F
 
 # #!/bin/bash
