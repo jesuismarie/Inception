@@ -3,7 +3,7 @@ version: '3.9'
 services:
   nginx:
     container_name: nginx
-    image: nginx
+    image: my-nginx
     build: ./requirements/nginx/
     env_file:
       - .env
@@ -19,7 +19,7 @@ services:
 
   mariadb:
     container_name: mariadb
-    image: mariadb
+    image: my-mariadb
     build: ./requirements/mariadb
     env_file:
       - .env
@@ -31,7 +31,7 @@ services:
 
   wordpress:
     container_name: wordpress
-    image: wordpress:php-fpm
+    image: my-wordpress:php-fpm
     build: ./requirements/wordpress
     env_file:
       - .env
