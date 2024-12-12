@@ -5,27 +5,47 @@ cd /var/www/html
 
 rm -rf *
 
-wp core download --allow-root
-ls -l /var/www/html
+if wp core download --allow-root; then
+	echo "WordPress core downloaded successfully."
+else
+	echo "Failed to download WordPress core. Exiting."
+fi
 
-cp wp-config-sample.php wp-config.php
+if cp wp-config-sample.php wp-config.php; then
+	echo "wp-config.php created."
+else
+	echo "Failed to create wp-config.php. Exiting."
+	exit 1
+fi
 
-sed -i "s/define( 'DB_NAME', '.*' );/define( 'DB_NAME', '${MYSQL_DATABASE}' );/g" wp-config.php
-sed -i "s/define( 'DB_USER', '.*' );/define( 'DB_USER', '${MYSQL_USER}' );/g" wp-config.php
-sed -i "s/define( 'DB_PASSWORD', '.*' );/define( 'DB_PASSWORD', '${MYSQL_PASSWORD}' );/g" wp-config.php
-sed -i "s/define( 'DB_HOST', '.*' );/define( 'DB_HOST', '${MYSQL_HOSTNAME}' );/g" wp-config.php
+if sed -i "s/define( 'DB_NAME', '.*' );/define( 'DB_NAME', '${MYSQL_DATABASE}' );/g" wp-config.php && \
+	sed -i "s/define( 'DB_USER', '.*' );/define( 'DB_USER', '${MYSQL_USER}' );/g" wp-config.php && \
+	sed -i "s/define( 'DB_PASSWORD', '.*' );/define( 'DB_PASSWORD', '${MYSQL_PASSWORD}' );/g" wp-config.php && \
+	sed -i "s/define( 'DB_HOST', '.*' );/define( 'DB_HOST', '${MYSQL_HOSTNAME}' );/g" wp-config.php; then
+	echo "Database credentials updated in wp-config.php."
+else
+	echo "Failed to update database credentials in wp-config.php. Exiting."
+fi
 
-wp core install --url="$DOMAIN_NAME" \
+if wp core install --url="$DOMAIN_NAME" \
 	--title="$WORDPRESS_TITLE" \
 	--admin_user="$WORDPRESS_ROOT_USERNAME" \
 	--admin_password="$WORDPRESS_ROOT_PASSWORD" \
 	--admin_email="$WORDPRESS_ROOT_EMAIL" \
-	--skip-email --allow-root
+	--skip-email --allow-root; then
+	echo "WordPress installed successfully."
+else
+	echo "Failed to install WordPress. Exiting."
+fi
 
-wp user create "$WORDPRESS_USER_USERNAME" "$WORDPRESS_USER_EMAIL" \
+if wp user create "$WORDPRESS_USER_USERNAME" "$WORDPRESS_USER_EMAIL" \
 	--role="$WORDPRESS_USER_ROLE" \
 	--user_pass="$WORDPRESS_USER_PASSWORD" \
-	--allow-root
+	--allow-root; then
+	echo "WordPress user created successfully."
+else
+	echo "Failed to create WordPress user. Exiting."
+fi
 
 chown -R www-data:www-data /var/www/html
 chmod -R 755 /var/www/html
@@ -36,55 +56,13 @@ else
 	echo "Failed to update WordPress core."
 fi
 
-sleep 10
-
 mkdir -p /run/php
 chown -R www-data:www-data /run/php
 
-wp theme install "twentytwentytwo" --activate --allow-root;
-
-exec php-fpm7.4 -F
-
-# #!/bin/bash
-
-# mkdir -p /var/www/html
-# cd /var/www/html
-
-# chown -R www-data:www-data /var/www/html/
-# chmod -R 755 /var/www/html/
-
-# if [ ! -e ./wp-config.php ]; then
-# 	rm -rf *
-# 	wp core download --allow-root
-# 	sed -i "s/username_here/$MYSQL_USER/g" wp-config-sample.php
-# 	sed -i "s/password_here/$MYSQL_PASSWORD/g" wp-config-sample.php
-# 	sed -i "s/localhost/$MYSQL_HOSTNAME/g" wp-config-sample.php
-# 	sed -i "s/database_name_here/$MYSQL_DATABASE/g" wp-config-sample.php
-# 	cp wp-config-sample.php wp-config.php
-
-# 	wp core install \
-# 		--url=$DOMAIN_NAME \
-# 		--title=$WORDPRESS_TITLE \
-# 		--admin_user=$WORDPRESS_ROOT_USERNAME \
-# 		--admin_password=$WORDPRESS_ROOT_PASSWORD \
-# 		--admin_email=$WORDPRESS_ROOT_EMAIL \
-# 		--skip-email --allow-root
-
-# 	wp user create $WORDPRESS_USER_USERNAME $WORDPRESS_USER_EMAIL \
-# 		--role=$WORDPRESS_USER_ROLE \
-# 		--user_pass=$WORDPRESS_USER_PASSWORD \
-# 		--allow-root
-
-# 	chmod -R a+w wp-config.php wp-content wp-content/plugins wp-content/themes wp-content/uploads
-# 	chown -R www-data:www-data wp-config.php wp-content wp-content/plugins wp-content/themes wp-content/uploads
-# fi
-
-# if wp core update --allow-root; then
-# 	echo "WordPress core successfully updated."
+# if wp theme install twentytwentytwo --activate --allow-root; then
+# 	echo "WordPress theme installed and activated successfully."
 # else
-# 	echo "Failed to update WordPress core."
+# 	echo "Failed to install and activate WordPress theme."
 # fi
 
-# sleep 10
-
-# /usr/sbin/php-fpm7.4 -F
+exec "$@";
