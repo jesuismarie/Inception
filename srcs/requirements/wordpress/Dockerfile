@@ -15,7 +15,7 @@ RUN apt update \
 	php${PHP_VERSION}-pdo \
 	php${PHP_VERSION}-gd \
 	php${PHP_VERSION}-cli \
-	php${PHP_VERSION}-cgi \
+	# php${PHP_VERSION}-cgi \
 	php${PHP_VERSION}-mbstring \
 	php${PHP_VERSION}-redis \
 	&& apt clean \
@@ -33,4 +33,6 @@ EXPOSE 9000
 
 RUN chmod +x run_wordpress.sh
 
-CMD ["./run_wordpress.sh"]
+ENTRYPOINT ["./run_wordpress.sh"]
+
+CMD ["php-fpm7.4", "-F"]
