@@ -18,4 +18,6 @@ EXPOSE 443
 
 RUN chmod +x run_nginx.sh
 
-CMD ["./run_nginx.sh"]
+ENTRYPOINT ["./run_nginx.sh"]
+
+CMD ["nginx", "-g", "daemon off;"]
