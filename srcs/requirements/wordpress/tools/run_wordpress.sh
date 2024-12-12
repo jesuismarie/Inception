@@ -59,10 +59,10 @@ fi
 mkdir -p /run/php
 chown -R www-data:www-data /run/php
 
-# if wp theme install twentytwentytwo --activate --allow-root; then
-# 	echo "WordPress theme installed and activated successfully."
-# else
-# 	echo "Failed to install and activate WordPress theme."
-# fi
+if wp theme install twentytwentytwo --activate --allow-root; then
+	echo "WordPress theme installed and activated successfully."
+else
+	echo "Failed to install and activate WordPress theme."
+fi
 
 exec "$@";
