@@ -6,10 +6,7 @@ all: create_dirs up
 create_dirs:
 	@mkdir -p /home/$(USER)/data/mariadb
 	@mkdir -p /home/$(USER)/data/wordpress
-	@sudo chown -R $(USER) /home/$(USER)/data/mariadb
-	@sudo chown -R www-data:www-data /home/$(USER)/data/wordpress
-	@sudo chmod -R 755 /home/$(USER)/data
-	@echo "${LIGTH_PURPLE}Data directories created and permissions set.${RESET}"
+	@echo "${LIGTH_PURPLE}Data directories created.${RESET}"
 
 re: fclean all
 
