@@ -1,4 +1,4 @@
-# Inception Project
+# Inception
 
 ## Introduction
 The Inception project is designed to introduce the concept of containerized infrastructure. The goal is to create a small, efficient setup of Docker containers using Docker Compose, adhering to specific rules and best practices. Each service runs in its dedicated container, and the entire setup is managed within a virtual machine environment.
@@ -53,7 +53,7 @@ Desktop/42-Projects/Inception/
 ## Usage
 
 ### Steps
-1. Before running Inception on Linux, ensure that you have the necessary dependencies installed. You may need to install the following packages:
+1. Before running Inception, ensure that you have the necessary dependencies installed. You may need to install the following packages:
 
    ```bash
    sudo apt-get update
@@ -70,12 +70,12 @@ Desktop/42-Projects/Inception/
    - The `.env` file is located in the `srcs` directory and stores environment variables.
    - Example structure:
      ```
-	 USERNAME=<your-login>
+     USERNAME=<your-login>
      DOMAIN_NAME=<your-login>.42.fr
      CERTS=/etc/nginx/ssl/<your-login>-selfsigned.crt
      KEYOUT=/etc/nginx/ssl/<your-login>-selfsigned.key
 
-     MYSQL_ROOT_PASSWORD=
+     MYSQL_ROOT_PASSWORD=<root-password>
      MYSQL_USER=<db-username>
      MYSQL_PASSWORD=<db-password>
      WORDPRESS_DB_NAME=<db-name>
@@ -84,26 +84,37 @@ Desktop/42-Projects/Inception/
      MYSQL_DATABASE=<db_name>
      MYSQL_PASSWORD=<db-password>
      MYSQL_HOSTNAME=mariadb
-     MYSQL_ROOT_PASSWORD=<root-password>
+     MYSQL_ROOT_PASSWORD=<db-root-password>
 
-     WORDPRESS_TITLE=Inception
-     WORDPRESS_ROOT_USERNAME=<root-username>
-     WORDPRESS_ROOT_ROLE=<admin-role>
-     WORDPRESS_ROOT_EMAIL=<root-mail>
-     WORDPRESS_ROOT_PASSWORD=<root-password>
+     WORDPRESS_TITLE=<wp-title>
+     WORDPRESS_ROOT_USERNAME=<wp-admin-username>
+     WORDPRESS_ROOT_ROLE=<wp-admin-role>
+     WORDPRESS_ROOT_EMAIL=<wp-root-mail>
+     WORDPRESS_ROOT_PASSWORD=<wp-root-password>
 
-     WORDPRESS_USER_USERNAME=<user-username>
-     WORDPRESS_USER_EMAIL=<user-mail>
-     WORDPRESS_USER_ROLE=<user-role>
-     WORDPRESS_USER_PASSWORD=<user-password>
+     WORDPRESS_USER_USERNAME=<wp-user-username>
+     WORDPRESS_USER_EMAIL=<wp-user-mail>
+     WORDPRESS_USER_ROLE=<wp-user-role>
+     WORDPRESS_USER_PASSWORD=<wp-user-password>
      ```
 
-3. Build and start the containers using the Makefile:
+3. Update the `/etc/hosts` file:
+   - Open the file with superuser privileges:
+     ```bash
+     sudo nano /etc/hosts
+     ```
+   - Add the following line, replacing `<your-login>` with your login and `x.x.x.x` with the IP address of your virtual machine:
+     ```
+     x.x.x.x <your-login>.42.fr www.<your-login>.42.fr
+     ```
+   - Save and exit the file.
+
+4. Build and start the containers using the Makefile:
    ```bash
    make
    ```
 
-4. Access the infrastructure:
+5. Access the infrastructure:
    - Visit `https://<your-login>.42.fr` to view the WordPress site.
 
 ### Additional Commands
