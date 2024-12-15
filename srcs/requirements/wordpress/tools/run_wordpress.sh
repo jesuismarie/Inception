@@ -8,13 +8,13 @@ rm -rf *
 if wp core download --allow-root; then
 	echo "WordPress core downloaded successfully."
 else
-	echo "Failed to download WordPress core. Exiting."
+	echo "Failed to download WordPress core."
 fi
 
 if cp wp-config-sample.php wp-config.php; then
 	echo "wp-config.php created."
 else
-	echo "Failed to create wp-config.php. Exiting."
+	echo "Failed to create wp-config.php."
 	exit 1
 fi
 
@@ -24,7 +24,7 @@ if sed -i "s/define( 'DB_NAME', '.*' );/define( 'DB_NAME', '${MYSQL_DATABASE}' )
 	sed -i "s/define( 'DB_HOST', '.*' );/define( 'DB_HOST', '${MYSQL_HOSTNAME}' );/g" wp-config.php; then
 	echo "Database credentials updated in wp-config.php."
 else
-	echo "Failed to update database credentials in wp-config.php. Exiting."
+	echo "Failed to update database credentials in wp-config.php."
 fi
 
 if wp core install --url="$DOMAIN_NAME" \
@@ -35,7 +35,7 @@ if wp core install --url="$DOMAIN_NAME" \
 	--skip-email --allow-root; then
 	echo "WordPress installed successfully."
 else
-	echo "Failed to install WordPress. Exiting."
+	echo "Failed to install WordPress."
 fi
 
 if wp user create "$WORDPRESS_USER_USERNAME" "$WORDPRESS_USER_EMAIL" \
@@ -44,7 +44,7 @@ if wp user create "$WORDPRESS_USER_USERNAME" "$WORDPRESS_USER_EMAIL" \
 	--allow-root; then
 	echo "WordPress user created successfully."
 else
-	echo "Failed to create WordPress user. Exiting."
+	echo "Failed to create WordPress user."
 fi
 
 chown -R www-data:www-data /var/www/html
