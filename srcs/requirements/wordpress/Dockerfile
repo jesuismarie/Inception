@@ -8,7 +8,6 @@ RUN apt update \
 	&& apt upgrade -y \
 	&& apt install -y \
 	curl \
-	wget \
 	php${PHP_VERSION} \
 	php${PHP_VERSION}-mysql \
 	php${PHP_VERSION}-fpm \
@@ -16,7 +15,6 @@ RUN apt update \
 	php${PHP_VERSION}-gd \
 	php${PHP_VERSION}-cli \
 	php${PHP_VERSION}-mbstring \
-	php${PHP_VERSION}-redis \
 	&& apt clean \
 	&& rm -rf /var/lib/apt/lists/*
 

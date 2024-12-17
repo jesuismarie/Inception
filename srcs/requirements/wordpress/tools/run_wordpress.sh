@@ -15,7 +15,6 @@ if cp wp-config-sample.php wp-config.php; then
 	echo "wp-config.php created."
 else
 	echo "Failed to create wp-config.php."
-	exit 1
 fi
 
 if sed -i "s/define( 'DB_NAME', '.*' );/define( 'DB_NAME', '${MYSQL_DATABASE}' );/g" wp-config.php && \
