@@ -88,13 +88,11 @@ Desktop/42-Projects/Inception/
 
      WORDPRESS_TITLE=<wp-title>
      WORDPRESS_ROOT_USERNAME=<wp-admin-username>
-     WORDPRESS_ROOT_ROLE=<wp-admin-role>
      WORDPRESS_ROOT_EMAIL=<wp-root-mail>
      WORDPRESS_ROOT_PASSWORD=<wp-root-password>
 
      WORDPRESS_USER_USERNAME=<wp-user-username>
      WORDPRESS_USER_EMAIL=<wp-user-mail>
-     WORDPRESS_USER_ROLE=<wp-user-role>
      WORDPRESS_USER_PASSWORD=<wp-user-password>
      ```
 
