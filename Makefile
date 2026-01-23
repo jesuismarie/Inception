@@ -41,6 +41,10 @@ clean: down
 	@echo "${LIGHT_PURPLE}Removing host data directories...${RESET}"
 	@sudo rm -rf $(WORDPRESS_PATH)
 	@sudo rm -rf $(MARIADB_PATH)
+
+	@echo "${LIGHT_PURPLE}Removing volumes ...${RESET}"
+	@docker volume rm srcs_wordpress-volume srcs_mariadb-volume 2>/dev/null || true
+
 	@echo "${LIGHT_PURPLE}Host data cleaned.${RESET}"
 
 fclean: clean
