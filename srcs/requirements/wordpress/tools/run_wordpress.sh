@@ -38,7 +38,7 @@ else
 fi
 
 if wp user create "$WORDPRESS_USER_USERNAME" "$WORDPRESS_USER_EMAIL" \
-	--role="$WORDPRESS_USER_ROLE" \
+	--role=subscriber \
 	--user_pass="$WORDPRESS_USER_PASSWORD" \
 	--allow-root; then
 	echo "WordPress user created successfully."
