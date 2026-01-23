@@ -1,4 +1,7 @@
 .vscode
 .DS_Store
-
 .env
+secrets/
+*.key
+*.pem
+*.crt
