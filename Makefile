@@ -49,7 +49,7 @@ clean: down
 
 fclean: clean
 	@echo "${LIGHT_PURPLE}Removing project Docker images...${RESET}"
-	@docker rmi my-nginx my-mariadb my-wordpress:php-fpm 2>/dev/null || true
+	@docker rmi my-nginx my-mariadb my-wordpress:php-fpm my-redis 2>/dev/null || true
 	@echo "${LIGHT_PURPLE}Project images removed.${RESET}"
 
 	@echo "${LIGHT_PURPLE}Clearing Docker build cache...${RESET}"
