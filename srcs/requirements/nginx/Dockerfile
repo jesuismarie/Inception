@@ -1,18 +1,14 @@
-FROM debian:bullseye
+FROM debian:bullseye-slim
 
-RUN apt update \
-	&& apt upgrade -y \
-	&& apt install -y \
-	nginx \
-	openssl \
-	&& apt clean \
+RUN apt-get update \
+	&& apt-get install -y --no-install-recommends\
+		nginx \
+		openssl \
 	&& rm -rf /var/lib/apt/lists/*
-
-RUN mkdir -p /etc/nginx/ssl
 
 COPY conf/default.conf /etc/nginx/conf.d/default.conf
 
-COPY tools/run_nginx.sh /
+COPY tools/run_nginx.sh /run_nginx.sh
 
 EXPOSE 443
 

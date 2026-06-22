@@ -1,10 +1,12 @@
 #!/bin/bash
 
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-	-keyout $KEYOUT -out $CERTS \
-	-subj "/C=AM/ST=Yerevan/L=Yerevan/O=42/OU=student/CN=$DOMAIN_NAME"
+mkdir -p /etc/nginx/ssl
 
-cd /etc/nginx/conf.d/
+if [ ! -f "$CERTS" ] || [ ! -f "$KEYOUT" ]; then
+	openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+		-keyout "$KEYOUT" -out "$CERTS" \
+		-subj "/C=AM/ST=Yerevan/L=Yerevan/O=42/OU=student/CN=$DOMAIN_NAME"
+fi
 
 if [ -f /etc/nginx/conf.d/default.conf ]; then
 	sed -i "s#\$DOMAIN_NAME#$DOMAIN_NAME#g" /etc/nginx/conf.d/default.conf && \
