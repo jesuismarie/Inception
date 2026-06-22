@@ -12,12 +12,6 @@ services:
       - inception
     volumes:
       - wordpress-volume:/var/www/html/
-    healthcheck:
-      test: ["CMD-SHELL", "curl -fk https://localhost/ || exit 1"]
-      interval: 15s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
     depends_on:
       wordpress:
         condition: service_healthy
