@@ -1,21 +1,20 @@
-FROM debian:bullseye
-
-RUN apt update \
-	&& apt upgrade -y \
-	&& apt install -y \
-	mariadb-client \
-	mariadb-server \
-	&& apt clean \
+FROM debian:bullseye-slim
+ 
+RUN apt-get update \
+	&& apt-get install -y --no-install-recommends \
+		mariadb-server \
 	&& rm -rf /var/lib/apt/lists/*
-
-COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
-
-COPY tools/run_mariadb.sh /
-
+ 
+COPY tools/run_mariadb.sh /run_mariadb.sh
+ 
+RUN printf '[mysqld]\nbind-address = 0.0.0.0\nskip-name-resolve\nskip-log-bin\n' \
+		>> /etc/mysql/mariadb.conf.d/99-docker.cnf \
+	&& mkdir -p /run/mysqld \
+	&& chown -R mysql:mysql /run/mysqld \
+	&& chmod +x /run_mariadb.sh
+ 
 EXPOSE 3306
+ 
+ENTRYPOINT ["/run_mariadb.sh"]
 
-RUN chmod +x run_mariadb.sh
-
-ENTRYPOINT ["./run_mariadb.sh"]
-
-CMD ["mysqld"]
+CMD ["mysqld", "--user=mysql"]

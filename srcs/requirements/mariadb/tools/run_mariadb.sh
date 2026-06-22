@@ -1,23 +1,25 @@
 #!/bin/bash
+set -e
 
-service mariadb start
+if [ ! -d "/var/lib/mysql/${MYSQL_DATABASE}" ]; then
+	echo "[MariaDB] First run detected — initializing database..."
 
-sleep 2
+	chown -R mysql:mysql /var/lib/mysql
 
-chown -R mysql:mysql /var/lib/mysql
-chmod 700 /var/lib/mysql/my_db
+	mysql_install_db --user=mysql --datadir=/var/lib/mysql > /dev/null
 
-cat <<EOF > db.sql
-CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE;
-CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';
-GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%';
-FLUSH PRIVILEGES;
-EOF
+	mysqld --user=mysql --skip-networking --bootstrap <<-EOF
+		FLUSH PRIVILEGES;
+		CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;
+		CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
+		GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${MYSQL_USER}'@'%';
+		ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
+		FLUSH PRIVILEGES;
+	EOF
 
-mysql < db.sql
+	echo "[MariaDB] Initialization complete."
+else
+	echo "[MariaDB] Database already initialized — skipping setup."
+fi
 
-rm db.sql
-
-service mariadb stop
-
-exec "$@";
+exec "$@"
