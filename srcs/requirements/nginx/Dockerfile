@@ -1,7 +1,7 @@
 FROM debian:bullseye-slim
 
 RUN apt-get update \
-	&& apt-get install -y --no-install-recommends\
+	&& apt-get install -y --no-install-recommends \
 		nginx \
 		openssl \
 	&& rm -rf /var/lib/apt/lists/*
