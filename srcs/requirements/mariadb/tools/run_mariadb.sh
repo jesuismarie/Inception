@@ -4,8 +4,6 @@ set -e
 if [ ! -d "/var/lib/mysql/${MYSQL_DATABASE}" ]; then
 	echo "[MariaDB] First run detected — initializing database..."
 
-	chown -R mysql:mysql /var/lib/mysql
-
 	mysql_install_db --user=mysql --datadir=/var/lib/mysql > /dev/null
 
 	mysqld --user=mysql --skip-networking --bootstrap <<-EOF

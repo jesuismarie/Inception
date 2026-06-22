@@ -60,6 +60,11 @@ install_wordpress()
 
 setup_redis()
 {
+	if wp config has WP_REDIS_HOST --allow-root >/dev/null 2>&1; then
+		echo "[WordPress] Redis already configured — skipping."
+		return 0
+	fi
+
 	echo "[WordPress] Configuring Redis cache..."
 	wp config set WP_REDIS_HOST redis --allow-root || true
 	wp config set WP_REDIS_PASSWORD "$REDIS_PASSWORD" --allow-root || true

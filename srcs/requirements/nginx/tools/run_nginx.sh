@@ -14,4 +14,4 @@ if [ -f /etc/nginx/conf.d/default.conf ]; then
 	sed -i "s#\$KEYOUT#$KEYOUT#g" /etc/nginx/conf.d/default.conf
 fi
 
-exec "$@";
+exec "$@"
