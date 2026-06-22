@@ -1,47 +1,80 @@
-version: '3.3'
-
 services:
+
   nginx:
     container_name: nginx
     image: my-nginx
     build: ./requirements/nginx/
-    env_file:
-      - .env
-    restart: always
+    env_file: .env
+    restart: unless-stopped
     ports:
       - "443:443"
     networks:
       - inception
     volumes:
       - wordpress-volume:/var/www/html/
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fk https://localhost/ || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     depends_on:
-      - wordpress
+      wordpress:
+        condition: service_healthy
 
   mariadb:
     container_name: mariadb
     image: my-mariadb
-    build: ./requirements/mariadb
-    env_file:
-      - .env
-    restart: always
+    build: ./requirements/mariadb/
+    env_file: .env
+    restart: unless-stopped
     networks:
       - inception
     volumes:
       - mariadb-volume:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -h 127.0.0.1 --user=root --password=$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 20s
 
   wordpress:
     container_name: wordpress
     image: my-wordpress:php-fpm
-    build: ./requirements/wordpress
-    env_file:
-      - .env
-    restart: always
+    build: ./requirements/wordpress/
+    env_file: .env
+    restart: unless-stopped
     networks:
       - inception
-    depends_on:
-      - mariadb
     volumes:
       - wordpress-volume:/var/www/html/
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/127.0.0.1/9000' 2>/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+  redis:
+    container_name: redis
+    image: my-redis
+    build: ./bonus/redis/
+    env_file: .env
+    restart: unless-stopped
+    networks:
+      - inception
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "$$REDIS_PASSWORD", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
 
 volumes:
   wordpress-volume:
